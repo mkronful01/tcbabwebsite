@@ -1,0 +1,18 @@
+.section {
+  padding-top: 0;
+  padding-bottom: var(--space-lg);
+  background: var(--color-paper);
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  max-width: 42rem;
+}
+
+.paragraph {
+  color: var(--color-muted);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}

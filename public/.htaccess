@@ -1,0 +1,53 @@
+# Business & Beyond – Apache SPA on SiteGround (replaces WordPress front door)
+DirectoryIndex site.html index.html
+
+<IfModule mod_headers.c>
+  Header always set Cache-Control "no-cache, no-store, must-revalidate, max-age=0"
+  Header always set Pragma "no-cache"
+  Header always set Expires "0"
+</IfModule>
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Block leftover WordPress / PHP attack surfaces
+  RewriteRule ^wp-admin(/|$) - [F,L]
+  RewriteRule ^wp-content(/|$) - [F,L]
+  RewriteRule ^wp-includes(/|$) - [F,L]
+  RewriteRule ^wp-.*\.php$ - [F,L]
+  RewriteRule ^xmlrpc\.php$ - [F,L]
+  RewriteRule ^wp_auto_login_.*\.php$ - [F,L]
+  RewriteRule \.php$ - [F,L]
+
+  RewriteRule ^index\.html$ - [L]
+  RewriteRule ^site\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /site.html [L]
+</IfModule>
+
+<FilesMatch "\.(php|PHP)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType video/mp4 "access plus 1 month"
+  ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
