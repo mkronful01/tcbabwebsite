@@ -26,7 +26,9 @@
   height: 100%;
   object-fit: cover;
   object-position: center center;
-  filter: brightness(1.12) contrast(1.04);
+  /* Avoid CSS filters — they force expensive GPU compositing and cause lag */
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .media::after {

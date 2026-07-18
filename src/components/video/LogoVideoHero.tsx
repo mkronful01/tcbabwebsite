@@ -20,38 +20,28 @@ export class LogoVideoHeroController {
   ): Promise<{ muted: boolean }> {
     Logger.info(
       "startPlayback",
-      "Attempting Specitas-style hero autoplay with low-volume sound",
+      "Starting hero playback muted for smooth decode, then applying low volume",
     );
     video.playsInline = true;
+    video.disableRemotePlayback = true;
     LogoVideoHeroController.applyLowVolume(video);
-    video.muted = false;
+
+    // Start muted so autoplay is reliable and decode is smoother
+    video.muted = true;
 
     try {
       await video.play();
-      Logger.info(
-        "startPlayback",
-        "Hero playback started with sound at low volume",
-      );
+      Logger.info("startPlayback", "Muted playback started; enabling low volume");
+      video.muted = false;
+      LogoVideoHeroController.applyLowVolume(video);
       return { muted: false };
-    } catch (soundError) {
+    } catch (error) {
       Logger.warn(
         "startPlayback",
-        "Unmuted autoplay blocked; retrying muted",
-        soundError,
+        "Playback failed even while muted",
+        error,
       );
-      video.muted = true;
-
-      try {
-        await video.play();
-        Logger.info(
-          "startPlayback",
-          "Hero playback started muted after browser block",
-        );
-        return { muted: true };
-      } catch (error) {
-        Logger.warn("startPlayback", "Autoplay blocked or failed", error);
-        return { muted: true };
-      }
+      return { muted: true };
     }
   }
 
@@ -130,9 +120,11 @@ export function LogoVideoHero() {
           className={styles.video}
           src={SiteContent.logoVideoSrc}
           autoPlay
+          muted
           loop
           playsInline
           preload="auto"
+          disablePictureInPicture
           aria-label="Business and Beyond company film"
         />
       </div>
