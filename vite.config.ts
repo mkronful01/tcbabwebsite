@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     watch: {
       // Avoid EBUSY crashes on OneDrive-locked media files
-      ignored: ["**/public/assets/video/**"],
+      ignored: ["**/public/assets/video/**", "**/scratchedspace/**"],
     },
   },
 });
