@@ -20,7 +20,7 @@ export class LogoVideoHeroController {
   ): Promise<{ muted: boolean }> {
     Logger.info(
       "startPlayback",
-      "Attempting logo hero autoplay with low-volume sound",
+      "Attempting Specitas-style hero autoplay with low-volume sound",
     );
     video.playsInline = true;
     LogoVideoHeroController.applyLowVolume(video);
@@ -30,7 +30,7 @@ export class LogoVideoHeroController {
       await video.play();
       Logger.info(
         "startPlayback",
-        "Logo hero playback started with sound at low volume",
+        "Hero playback started with sound at low volume",
       );
       return { muted: false };
     } catch (soundError) {
@@ -45,7 +45,7 @@ export class LogoVideoHeroController {
         await video.play();
         Logger.info(
           "startPlayback",
-          "Logo hero playback started muted after browser block",
+          "Hero playback started muted after browser block",
         );
         return { muted: true };
       } catch (error) {
@@ -61,7 +61,7 @@ export class LogoVideoHeroController {
     if (!nextMuted) {
       LogoVideoHeroController.applyLowVolume(video);
     }
-    Logger.info("toggleMute", `Logo video muted -> ${nextMuted}`);
+    Logger.info("toggleMute", `Hero video muted -> ${nextMuted}`);
     return nextMuted;
   }
 
@@ -71,12 +71,12 @@ export class LogoVideoHeroController {
   ): boolean {
     if (isPlaying) {
       video.pause();
-      Logger.info("togglePlay", "Logo video paused");
+      Logger.info("togglePlay", "Hero video paused");
       return false;
     }
 
     void video.play();
-    Logger.info("togglePlay", "Logo video resumed");
+    Logger.info("togglePlay", "Hero video resumed");
     return true;
   }
 
@@ -98,9 +98,8 @@ export function LogoVideoHero() {
       return;
     }
 
-    Logger.info("LogoVideoHero", "Mounting logo hero video", {
+    Logger.info("LogoVideoHero", "Mounting Specitas-style home video hero", {
       src: SiteContent.logoVideoSrc,
-      targetVolume: LogoVideoHeroController.lowVolume,
     });
 
     const onPlaying = () => setPlaying(true);
@@ -124,7 +123,7 @@ export function LogoVideoHero() {
   }, []);
 
   return (
-    <section className={styles.hero} aria-label="Business and Beyond logo film">
+    <section className={styles.hero} aria-label="Home video">
       <div className={styles.media}>
         <video
           ref={videoRef}
@@ -134,15 +133,31 @@ export function LogoVideoHero() {
           loop
           playsInline
           preload="auto"
-          aria-label="Business and Beyond animated logo"
+          aria-label="Business and Beyond company film"
         />
       </div>
 
-      <div className={styles.bar}>
+      <div className={styles.content}>
+        <div className={styles.brandBlock}>
+          <img
+            className={styles.logoMark}
+            src={SiteContent.logoMarkSrc}
+            alt=""
+            width={88}
+            height={88}
+          />
+          <div>
+            <div className={styles.wordmarkPrimary}>Business</div>
+            <div className={styles.wordmarkSecondary}>&amp; Beyond</div>
+          </div>
+        </div>
+
+        <h1 className={styles.headline}>{hero.headline}</h1>
         <p className={styles.support}>{hero.support}</p>
+
         <div className={styles.actions}>
           <Link
-            className="btn btn--ghost"
+            className="btn btn--primary"
             to={hero.primaryCta.path}
             onClick={() =>
               LogoVideoHeroController.handleCta(
@@ -198,6 +213,8 @@ export function LogoVideoHero() {
           {muted ? "Sound" : "Mute"}
         </button>
       </div>
+
+      <div className={styles.accentBar} aria-hidden="true" />
     </section>
   );
 }

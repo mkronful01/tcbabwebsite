@@ -15,6 +15,7 @@
 
   --max-width: 1080px;
   --header-height: 4rem;
+  --page-gutter: 1.25rem;
   --space-md: 1.25rem;
   --space-lg: 2rem;
   --space-xl: 5.5rem;
@@ -45,6 +46,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100dvh;
+  overflow-x: hidden;
 }
 
 h1,
@@ -56,10 +58,12 @@ h3 {
   letter-spacing: -0.03em;
   color: var(--color-ink);
   margin: 0;
+  overflow-wrap: break-word;
 }
 
 p {
   margin: 0;
+  overflow-wrap: break-word;
 }
 
 a {
@@ -71,6 +75,7 @@ img,
 video {
   display: block;
   max-width: 100%;
+  height: auto;
 }
 
 button {
@@ -83,7 +88,7 @@ button {
 }
 
 .section__inner {
-  width: min(100% - 2.5rem, var(--max-width));
+  width: min(100% - (var(--page-gutter) * 2), var(--max-width));
   margin: 0 auto;
 }
 
@@ -148,6 +153,15 @@ button {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (max-width: 720px) {
+  :root {
+    --header-height: 3.75rem;
+    --page-gutter: 1rem;
+    --space-xl: 3.25rem;
+    --space-lg: 1.5rem;
   }
 }
 

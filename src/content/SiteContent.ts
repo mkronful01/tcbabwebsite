@@ -41,6 +41,7 @@ export class SiteContent {
   ];
 
   public static readonly hero = {
+    headline: "Strategic clarity. Growth that lasts.",
     support:
       "Strategic consulting and business transformation for organizations across the UAE and Middle East.",
     primaryCta: { label: "About us", path: "/about" },

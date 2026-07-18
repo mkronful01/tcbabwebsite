@@ -1,5 +1,5 @@
 .intro {
-  padding: calc(var(--header-height) + 3.5rem) 0 2rem;
+  padding: calc(var(--header-height) + env(safe-area-inset-top) + 3rem) 0 1.5rem;
 }
 
 .light {
@@ -24,12 +24,12 @@
 }
 
 .inner {
-  width: min(100% - 2.5rem, var(--max-width));
+  width: min(100% - (var(--page-gutter) * 2), var(--max-width));
   margin: 0 auto;
 }
 
 .title {
-  font-size: clamp(2.1rem, 4.5vw, 3.4rem);
+  font-size: clamp(1.85rem, 7vw, 3.4rem);
   max-width: 14ch;
 }
 
@@ -37,5 +37,16 @@
   margin-top: 1rem;
   max-width: 42ch;
   color: var(--color-muted);
-  font-size: 1.05rem;
+  font-size: clamp(0.98rem, 2.8vw, 1.05rem);
+}
+
+@media (max-width: 720px) {
+  .intro {
+    padding-top: calc(var(--header-height) + env(safe-area-inset-top) + 2rem);
+    padding-bottom: 1.15rem;
+  }
+
+  .title {
+    max-width: none;
+  }
 }

@@ -13,6 +13,12 @@
 
 .paragraph {
   color: var(--color-muted);
-  font-size: 1.05rem;
+  font-size: clamp(0.98rem, 2.8vw, 1.05rem);
   line-height: 1.7;
+}
+
+@media (max-width: 720px) {
+  .inner {
+    max-width: none;
+  }
 }

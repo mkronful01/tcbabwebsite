@@ -1,11 +1,11 @@
 .footer {
   background: var(--color-ink);
   color: rgba(255, 255, 255, 0.72);
-  padding: 2rem 0;
+  padding: 2rem 0 calc(2rem + env(safe-area-inset-bottom));
 }
 
 .inner {
-  width: min(100% - 2.5rem, var(--max-width));
+  width: min(100% - (var(--page-gutter) * 2), var(--max-width));
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -35,5 +35,9 @@
   .inner {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .legal {
+    max-width: none;
   }
 }

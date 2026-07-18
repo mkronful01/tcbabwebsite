@@ -4,25 +4,27 @@
   padding-bottom: calc(var(--space-xl) + 1rem);
 }
 
-
 .inner {
   max-width: 44rem;
 }
 
 .title {
-  font-size: clamp(2.1rem, 4.5vw, 3.4rem);
+  font-size: clamp(1.85rem, 7vw, 3.4rem);
   margin-bottom: 1.5rem;
 }
 
 .email {
   display: inline-block;
+  max-width: 100%;
   font-family: var(--font-display);
-  font-size: clamp(1.25rem, 2.4vw, 1.85rem);
+  font-size: clamp(1.05rem, 4.5vw, 1.85rem);
   font-weight: 600;
   letter-spacing: -0.02em;
   border-bottom: 2px solid var(--color-brand);
   padding-bottom: 0.15rem;
   transition: color 0.2s var(--ease-out);
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .email:hover {
@@ -33,4 +35,10 @@
   margin-top: 1.25rem;
   color: var(--color-muted);
   font-size: 0.95rem;
+}
+
+@media (max-width: 720px) {
+  .title {
+    margin-bottom: 1.15rem;
+  }
 }
