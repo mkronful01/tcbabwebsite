@@ -145,14 +145,10 @@ export function LogoVideoHero() {
           <img
             className={styles.logoMark}
             src={SiteContent.logoMarkSrc}
-            alt=""
+            alt={SiteContent.brandName}
             width={88}
             height={88}
           />
-          <div>
-            <div className={styles.wordmarkPrimary}>Business</div>
-            <div className={styles.wordmarkSecondary}>&amp; Beyond</div>
-          </div>
         </div>
 
         <h1 className={styles.headline}>{hero.headline}</h1>
