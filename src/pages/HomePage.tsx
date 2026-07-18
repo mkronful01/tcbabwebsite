@@ -4,7 +4,10 @@ import { Logger } from "../logging/Logger";
 
 export class HomePageController {
   public static logMount(): void {
-    Logger.info("logMount", "Home page mounted with logo hero only");
+    Logger.info(
+      "logMount",
+      "Home page mounted with video band and intro below",
+    );
   }
 }
 
@@ -12,7 +15,7 @@ export function HomePage() {
   HomePageController.logMount();
 
   return (
-    <PageShell headerTone="dark" hideFooter showBrand={false}>
+    <PageShell headerTone="dark" showBrand={false}>
       <LogoVideoHero />
     </PageShell>
   );

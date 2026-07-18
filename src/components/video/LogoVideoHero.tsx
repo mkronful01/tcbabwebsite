@@ -90,7 +90,7 @@ export function LogoVideoHero() {
       return;
     }
 
-    Logger.info("LogoVideoHero", "Mounting home video hero", {
+    Logger.info("LogoVideoHero", "Mounting split home hero (video band + intro)", {
       src: SiteContent.logoVideoSrc,
     });
 
@@ -124,96 +124,106 @@ export function LogoVideoHero() {
   }, []);
 
   return (
-    <section className={styles.hero} aria-label="Home video">
-      <div className={styles.media}>
-        <video
-          ref={videoRef}
-          className={styles.video}
-          src={SiteContent.logoVideoSrc}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          disablePictureInPicture
-          aria-label="Business and Beyond company film"
-        />
-      </div>
-
-      <div className={styles.content}>
-        <div className={styles.brandBlock}>
-          <img
-            className={styles.logoMark}
-            src={SiteContent.logoMarkSrc}
-            alt={SiteContent.brandName}
-            width={88}
-            height={88}
+    <section className={styles.hero} aria-label="Home">
+      <div className={styles.mediaBand}>
+        <div className={styles.media}>
+          <video
+            ref={videoRef}
+            className={styles.video}
+            src={SiteContent.logoVideoSrc}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            disablePictureInPicture
+            aria-label="Business and Beyond company film"
           />
         </div>
 
-        <h1 className={styles.headline}>{hero.headline}</h1>
-        <p className={styles.support}>{hero.support}</p>
+        <div className={styles.controls}>
+          <button
+            type="button"
+            className={styles.controlBtn}
+            onClick={() => {
+              const video = videoRef.current;
+              if (!video) {
+                Logger.warn(
+                  "togglePlay",
+                  "Play control clicked with null video",
+                );
+                return;
+              }
+              setPlaying(LogoVideoHeroController.togglePlay(video, playing));
+            }}
+          >
+            {playing ? "Pause" : "Play"}
+          </button>
+          <button
+            type="button"
+            className={styles.controlBtn}
+            onClick={() => {
+              const video = videoRef.current;
+              if (!video) {
+                Logger.warn(
+                  "toggleMute",
+                  "Mute control clicked with null video",
+                );
+                return;
+              }
+              setMuted(LogoVideoHeroController.toggleMute(video, muted));
+            }}
+          >
+            {muted ? "Sound" : "Mute"}
+          </button>
+        </div>
 
-        <div className={styles.actions}>
-          <Link
-            className="btn btn--primary"
-            to={hero.primaryCta.path}
-            onClick={() =>
-              LogoVideoHeroController.handleCta(
-                hero.primaryCta.label,
-                hero.primaryCta.path,
-              )
-            }
-          >
-            {hero.primaryCta.label}
-          </Link>
-          <Link
-            className="btn btn--ghost"
-            to={hero.secondaryCta.path}
-            onClick={() =>
-              LogoVideoHeroController.handleCta(
-                hero.secondaryCta.label,
-                hero.secondaryCta.path,
-              )
-            }
-          >
-            {hero.secondaryCta.label}
-          </Link>
+        <div className={styles.accentBar} aria-hidden="true" />
+      </div>
+
+      <div className={styles.intro}>
+        <div className={styles.introInner}>
+          <div className={styles.brandBlock}>
+            <img
+              className={styles.logoMark}
+              src={SiteContent.logoMarkSrc}
+              alt={SiteContent.brandName}
+              width={88}
+              height={88}
+            />
+          </div>
+
+          <h1 className={styles.headline}>{hero.headline}</h1>
+          <p className={styles.support}>{hero.support}</p>
+
+          <div className={styles.actions}>
+            <Link
+              className="btn btn--primary"
+              to={hero.primaryCta.path}
+              onClick={() =>
+                LogoVideoHeroController.handleCta(
+                  hero.primaryCta.label,
+                  hero.primaryCta.path,
+                )
+              }
+            >
+              {hero.primaryCta.label}
+            </Link>
+            <Link
+              className={`btn ${styles.btnSecondary}`}
+              to={hero.secondaryCta.path}
+              onClick={() =>
+                LogoVideoHeroController.handleCta(
+                  hero.secondaryCta.label,
+                  hero.secondaryCta.path,
+                )
+              }
+            >
+              {hero.secondaryCta.label}
+            </Link>
+          </div>
         </div>
       </div>
-
-      <div className={styles.controls}>
-        <button
-          type="button"
-          className={styles.controlBtn}
-          onClick={() => {
-            const video = videoRef.current;
-            if (!video) {
-              Logger.warn("togglePlay", "Play control clicked with null video");
-              return;
-            }
-            setPlaying(LogoVideoHeroController.togglePlay(video, playing));
-          }}
-        >
-          {playing ? "Pause" : "Play"}
-        </button>
-        <button
-          type="button"
-          className={styles.controlBtn}
-          onClick={() => {
-            const video = videoRef.current;
-            if (!video) {
-              Logger.warn("toggleMute", "Mute control clicked with null video");
-              return;
-            }
-            setMuted(LogoVideoHeroController.toggleMute(video, muted));
-          }}
-        >
-          {muted ? "Sound" : "Mute"}
-        </button>
-      </div>
-
-      <div className={styles.accentBar} aria-hidden="true" />
     </section>
   );
 }
