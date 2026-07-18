@@ -20,27 +20,24 @@ export class LogoVideoHeroController {
   ): Promise<{ muted: boolean }> {
     Logger.info(
       "startPlayback",
-      "Starting hero playback muted for smooth decode, then applying low volume",
+      "Starting hero playback muted for reliable Netlify/browser autoplay",
     );
     video.playsInline = true;
     video.disableRemotePlayback = true;
-    LogoVideoHeroController.applyLowVolume(video);
-
-    // Start muted so autoplay is reliable and decode is smoother
     video.muted = true;
+    LogoVideoHeroController.applyLowVolume(video);
 
     try {
       await video.play();
-      Logger.info("startPlayback", "Muted playback started; enabling low volume");
-      video.muted = false;
-      LogoVideoHeroController.applyLowVolume(video);
-      return { muted: false };
-    } catch (error) {
-      Logger.warn(
+      Logger.info(
         "startPlayback",
-        "Playback failed even while muted",
-        error,
+        "Muted hero playback started successfully",
       );
+      // Stay muted until the user taps Sound — unmuting without a gesture
+      // often pauses playback on Chrome/Safari/Netlify HTTPS.
+      return { muted: true };
+    } catch (error) {
+      Logger.warn("startPlayback", "Autoplay blocked or failed", error);
       return { muted: true };
     }
   }
@@ -50,6 +47,9 @@ export class LogoVideoHeroController {
     video.muted = nextMuted;
     if (!nextMuted) {
       LogoVideoHeroController.applyLowVolume(video);
+      void video.play().catch((error) => {
+        Logger.warn("toggleMute", "Play after unmute failed", error);
+      });
     }
     Logger.info("toggleMute", `Hero video muted -> ${nextMuted}`);
     return nextMuted;
@@ -65,7 +65,9 @@ export class LogoVideoHeroController {
       return false;
     }
 
-    void video.play();
+    void video.play().catch((error) => {
+      Logger.warn("togglePlay", "Resume play failed", error);
+    });
     Logger.info("togglePlay", "Hero video resumed");
     return true;
   }
@@ -77,7 +79,7 @@ export class LogoVideoHeroController {
 
 export function LogoVideoHero() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const [muted, setMuted] = useState(false);
+  const [muted, setMuted] = useState(true);
   const [playing, setPlaying] = useState(false);
   const { hero } = SiteContent;
 
@@ -88,15 +90,23 @@ export function LogoVideoHero() {
       return;
     }
 
-    Logger.info("LogoVideoHero", "Mounting Specitas-style home video hero", {
+    Logger.info("LogoVideoHero", "Mounting home video hero", {
       src: SiteContent.logoVideoSrc,
     });
 
     const onPlaying = () => setPlaying(true);
     const onPause = () => setPlaying(false);
+    const onError = () => {
+      Logger.error("LogoVideoHero", "Video element error", {
+        code: video.error?.code,
+        message: video.error?.message,
+        src: video.currentSrc || video.src,
+      });
+    };
 
     video.addEventListener("playing", onPlaying);
     video.addEventListener("pause", onPause);
+    video.addEventListener("error", onError);
 
     void LogoVideoHeroController.startPlayback(video).then((result) => {
       Logger.info(
@@ -109,6 +119,7 @@ export function LogoVideoHero() {
     return () => {
       video.removeEventListener("playing", onPlaying);
       video.removeEventListener("pause", onPause);
+      video.removeEventListener("error", onError);
     };
   }, []);
 
