@@ -25,7 +25,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center center;
+  object-position: center 35%;
   /* Avoid CSS filters — they force expensive GPU compositing and cause lag */
   transform: translateZ(0);
   backface-visibility: hidden;
@@ -38,22 +38,35 @@
   z-index: 1;
   background:
     linear-gradient(
-      115deg,
-      rgba(0, 0, 0, 0.42) 8%,
-      rgba(0, 0, 0, 0.14) 48%,
-      rgba(0, 0, 0, 0.06) 100%
+      to right,
+      rgba(0, 0, 0, 0.55) 0%,
+      rgba(0, 0, 0, 0.2) 55%,
+      rgba(0, 0, 0, 0.35) 100%
     ),
-    linear-gradient(to top, rgba(0, 0, 0, 0.55) 0%, transparent 45%);
+    linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.94) 0%,
+      rgba(0, 0, 0, 0.82) 22%,
+      rgba(0, 0, 0, 0.45) 48%,
+      rgba(0, 0, 0, 0.15) 68%,
+      transparent 82%
+    );
   pointer-events: none;
 }
 
 .content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   width: min(100% - (var(--page-gutter) * 2), var(--max-width));
   margin: 0 auto;
   padding: calc(var(--header-height) + var(--space-xl)) 0
     calc(var(--space-xl) + env(safe-area-inset-bottom));
+}
+
+.headline,
+.support,
+.brandBlock {
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55);
 }
 
 .brandBlock {
